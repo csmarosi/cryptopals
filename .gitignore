@@ -1,0 +1,7 @@
+*.o
+*.hi
+
+*_Test
+
+s??p??
+hexToAscii
