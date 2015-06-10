@@ -1,5 +1,6 @@
-module Set1Module (hexToInt, asciiToInt, base64ToInt,intToHex, intToAscii, intToBase64,
-                   xorAgainst, decryptXor, getXorKey) where
+module Set1Module (hexToInt, asciiToInt, base64ToInt,intToHex, intToAscii, intToBase64
+                  ,xorAgainst, decryptXor, getXorKey, repeatKeyXor
+                  ) where
 
 --Design notes:
 -- 1. Everything that is not conversion should be Int->Int (mainly because of xor)
@@ -31,3 +32,6 @@ getXorKey cypher = filter (textScrore cypher) [0..255]
 
 decryptXor :: [Int] -> [Int]
 decryptXor a = xorAgainst a $ getXorKey a !! 0
+
+repeatKeyXor :: [Int] -> [Int] -> [Int]
+repeatKeyXor str key = zipWith xor str $ cycle key

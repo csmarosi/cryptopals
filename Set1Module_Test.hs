@@ -24,6 +24,15 @@ test3_web = TestCase $ assertEqual
   [88]
   (getXorKey $ hexToInt "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736")
 
+repeatedKeyCyptherText = (hexToInt "0b3637272a2b2e63622c2e69692a23693a2a3c6324202d623d63343c2a26226324272765272a282b2f20430a652e2c652a3124333a653e2b2027630c692b20283165286326302e27282f")
+repeatedKeyPlainText = "Burning 'em, if you ain't quick and nimble\nI go crazy when I hear a cymbal"
+
+test5_web = TestCase $ assertEqual
+  "TC for the example in the page"
+  repeatedKeyCyptherText
+  (repeatKeyXor (asciiToInt repeatedKeyPlainText) (asciiToInt "ICE"))
+
 main = runTestTT $ TestList [
   test1_web, test2_hexToInt, test3_xorAgainst, test3_web
+ ,test5_web
   ]
