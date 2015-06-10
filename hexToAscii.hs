@@ -6,4 +6,4 @@ import Data.Char
 main :: IO ()
 main = do
     args <- getArgs
-    mapM_ (putStrLn . \x -> map chr . hexToByteList $ x) args
+    mapM_ (putStrLn . \x -> map chr . hexToInt $ x) args
