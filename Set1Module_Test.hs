@@ -32,7 +32,23 @@ test5_web = TestCase $ assertEqual
   repeatedKeyCyptherText
   (repeatKeyXor (asciiToInt repeatedKeyPlainText) (asciiToInt "ICE"))
 
+test6_dist = TestCase $ assertEqual
+  "TC for the example in the page"
+  37
+  (hammingDistance (asciiToInt "this is a test") (asciiToInt "wokka wokka!!!"))
+
+test6_keylength = TestCase $ assertEqual
+  "TC for an util function"
+  [3]
+  (getKeySizeForRepKeyXor repeatedKeyCyptherText [1..5])
+
+test6_break = TestCase $ assertEqual
+  "Decrypting test 5"
+  [[map ord "ICE"]]
+  (getKeysForRepKeyXor repeatedKeyCyptherText [1..5])
+
 main = runTestTT $ TestList [
   test1_web, test2_hexToInt, test3_xorAgainst, test3_web
  ,test5_web
+ ,test6_dist, test6_keylength, test6_break
   ]
