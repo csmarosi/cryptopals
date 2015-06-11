@@ -20,18 +20,33 @@ intToAscii = ByteConverters.intToAscii
 intToBase64 = ByteConverters.intToBase64
 
 
+--TODO: argMin must exist as a standard function
+argMin :: (Int -> Float) -> [Int] -> [Int]
+argMin fun arg = map (\x -> arg !! x) ind
+    where min = minimum list + 0.001
+          ind = filter (\x -> ((list !! x) <= min)) [0..(length list - 1)]
+          list = map fun arg
+
+divideInt :: Int -> Int -> Float
+divideInt a b = (fromIntegral a) / (fromIntegral b)
+
+
 xorAgainst :: [Int] -> Int -> [Int]
 xorAgainst plain key = zipWith xor plain (repeat key)
 
-isText :: Int -> Bool
-isText a = elem a $ map ord (['A'..'Z'] ++ ['a'..'z'] ++ ['0'..'9'] ++ " '\n,-!.")
+isPlainText :: [Int] -> Bool
+isPlainText text = and $ map (\x -> elem x plainChar) text
+    where plainChar = map ord (['A'..'Z'] ++ ['a'..'z'] ++ ['0'..'9'] ++ " '\n,-!.")
 
---TODO: black magic here; character count is not enough, some distribution is needed
-textScrore :: [Int] -> Int -> Bool
-textScrore cypher key = and $ map isText $ xorAgainst cypher key
+--TODO: black magic here; fix this naive implementation
+textScore :: [Int] -> Float
+textScore text = 0.0 - length (filter (\x -> elem x commonChars) text) `divideInt` length text
+    where commonChars = map ord "etaoin shrdlu"
 
+--TODO: Questionable: signature promises a list, but tries hard to return at most 1 element
 getXorKey :: [Int] -> [Int]
-getXorKey cypher = filter (textScrore cypher) [0..255]
+getXorKey cypher = argMin (textScore . xorAgainst cypher) filteredKeys
+    where filteredKeys = filter (isPlainText . xorAgainst cypher) [0..255]
 
 decryptXor :: [Int] -> [Int]
 decryptXor a = xorAgainst a $ getXorKey a !! 0
@@ -54,16 +69,6 @@ hammingDistance a b
 every n xs = case drop (n-1) xs of
               (y:ys) -> y : every n ys
               [] -> []
-
---TODO: argMin must exist as a standard function
-argMin :: (Int -> Float) -> [Int] -> [Int]
-argMin fun arg = map (\x -> arg !! x) ind
-    where min = minimum list + 0.001
-          ind = filter (\x -> ((list !! x) <= min)) [0..(length list - 1)]
-          list = map fun arg
-
-divideInt :: Int -> Int -> Float
-divideInt a b = (fromIntegral a) / (fromIntegral b)
 
 --TODO: black magic here
 hammingNormal :: [Int] -> Int -> Float
