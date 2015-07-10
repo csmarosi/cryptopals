@@ -18,6 +18,7 @@ test: all ut
 	./s01p04 | grep party
 	./hexToAscii 0b3637272a2b2e63622c2e69692a23693a2a3c6324202d623d63343c2a26226324272765272a282b2f20430a652e2c652a3124333a653e2b2027630c692b20283165286326302e27282f | ./s01p05 ICE | grep Burning
 	base64 --decode 6.txt | ./s01p06 | grep -E '\[|ringin'
+	base64 --decode 7.txt | ./s01p07 | grep doctor
 
 ut: clean Set1Module_Test
 	./Set1Module_Test
